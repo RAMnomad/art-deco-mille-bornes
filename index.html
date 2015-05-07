@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>MilleBornes</title>
+	<link href='http://fonts.googleapis.com/css?family=Lobster|Fjalla+One' rel='stylesheet' type='text/css'>
+
+    <!-- MilleBornes references -->
+    <link href="index.css" rel="stylesheet" />
+	<link href="animate.css" rel = "stylesheet" />
+	
+	<script type = "text/javascript" src = "jquery-1.11.2.min.js"></script>
+	<script type = "text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script type = "text/javascript" src = "game.js"></script>
+	<script type = "text/javascript" src = "transform.js"></script>
+
+
+	
+</head>
+<body>
+
+<div class="level1"></div>
+<div class="level2"></div>
+<div class="level3"></div>
+<div class="main">
+    <header>
+        <div class="overlay">
+			<h1>
+			<img src = "images/lady.png" class = "left" />
+            Mille Bornes 
+			<img src = "images/ladyreverse.png" class = "right" /></h1>
+			
+			<span id="tagline">a card game celebrating of the elegant sport of automobile racing</span>
+        </div>
+    </header>
+		<div class = "opponent hand">
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	<!--buttons-->
+	<div class="menu">
+		<div id="instructions" class ="buttons">
+			<h2> Rules of the Game </h2>
+		</div>
+		
+		<div id="highscores" class ="buttons">
+			<h2> Leaderboard </h2>
+		</div>
+		
+		<div id="play" class ="buttons">
+			<h2> Click to Play </h2>
+		</div>
+	</div>
+	
+	    <div class="opponent play-area">
+		</div>
+		<div class="player play-area">	
+		</div>
+	<div class = "notify"></div>
+	<!--Deck of Cards-->
+	<div id ="deck" >
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Rules and leaderboard lightboxes -->
+	<div class="lightbox">
+		
+		<div id="rules">
+			<p class = "close">Click here to close.</p>
+			<h1>T<span class="inner">he Rule</span>s</h1>
+			<h2> Play Sequence</h2>
+			<p>You will be dealt a hand of six cards. The standard turn proceeds in
+			a simple "draw one, play one" style. Players begin the game with an implied 
+			"Stop" active. You must play a "Roulez" or "Vehicule Prioritaire" in order to 
+			begin moving.  Distance cards provide points and move the player toward 
+			the finish line. Hazard cards slow your opponent down with flat tires, accidents,
+			stop lights, speed limits, and fuel exhaustion.  Hazards may only be played while 
+			your opponent is already in motion, with the exception of speed limits.  A hazard 
+			may be interrupted by an appropriate safety card. If you play a safety a second 
+			card must be drawn on your turn.  Safety cards provide immunity against a 
+			corresponding hazard, and remedy cards can be played to remove an active hazard as 
+			outlined in the table below.</p>
+			<table> 
+				<tr class ="head"> 
+					<td>Hazard</td><td>Remedy</td><td>Safety</td>
+				</tr>
+				<tr>
+					<td>Stop</td><td>Roulez</td><td>Vehicule Prioritaire</td>
+				</tr>
+				<tr>
+					<td>Panne d'Essence</td><td>Essence</td><td>Citerne d'Essence</td>
+					</tr>
+				<tr>
+					<td>Creve</td><td>Roue de Secours</td><td>Uncrevable</td>
+				</tr>
+				<tr> 
+					<td>Accident</td><td>Reparations</td><td>As Du Volant</td>
+				</tr>
+			</table>
+				
+		</div>
+	</div>
+
+	<!-- Player areas -->
+
+	<div class = "scores">
+	<h2> Miles Travelled </h2>
+	<h3> You </h3>
+	<h4 id = "pl">0</h4>
+	<h3> Opponent </h3>
+	<h4 id = "opp"> 0</h4>
+	</div>
+    
+	<div>
+	<button type=button  class = "discard">Discard</button>
+	</div>
+    <div class="player hand" >
+	
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+			<div class = "card" >
+			<div class ="front">
+			  <div class = "top-left"></div>
+			  <div class = "center"></div>
+			  <div class = "bottom-right"></div>
+			</div>
+			<div class ="back">
+				<div class="deckborder">
+					 
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+</div>
+</body>
+</html>
