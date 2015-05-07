@@ -133,16 +133,7 @@ $(document).ready(function () {
 	window.updatePlayArea = function(thisPlayer, switchp){
 		console.log("Playarea function");
 		if (activePlayer == opponent){
-			var findWhat = ".card:hidden";
-		}
-		else{
-			findWhat = ".card";
-		}
-		var fromPlayArea = "div." + activePlayer.name + ".hand";
-		var toPlayArea = "div." + thisPlayer.name + ".play-area";
-		console.log("Card going to: ", toPlayArea);
-		$this = $(fromPlayArea).find(findWhat).eq(spliceIndex);
-		if (activePlayer == opponent){
+			$this = $(".opponent.hand").find(".card").eq(spliceIndex);
 			$this.find(".top-left").text(activePlayer.hand[spliceIndex].name);
 			$this.find(".bottom-right").text(activePlayer.hand[spliceIndex].name);
 			var img = '<img src = "images/' + opponent.hand[spliceIndex].name + '.png" width = "130" />';
@@ -150,14 +141,19 @@ $(document).ready(function () {
 			var a = $this.find("top-left").text()
 			console.log(a);
 		}
+		else{
+			$this = $(".player.hand").find(".card").eq(spliceIndex);
+		}
+		var toPlayArea = "." + thisPlayer.name + ".play-area";
+
 		$this.clone()
-			.appendTo(toPlayArea).removeClass("animated flip flipInY disabled").show()
-			.children(".back").hide().children(".front").show();
+			.appendTo(toPlayArea).removeClass("animated disabled").show()
+			.children(".back").hide().children(".front").show().children().show();
 		
-		$(fromPlayArea).find(".card").eq(spliceIndex).detach().appendTo(fromPlayArea).hide();
-		setTimeout(function(){
+		$this.detach().appendTo(fromPlayArea).hide();
+		//setTimeout(function(){
 		switchp(drawCard);
-		},0);
+		//},0);
 	}
 	
 	window.cleanUp = function(){
