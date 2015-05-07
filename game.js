@@ -443,7 +443,7 @@ var disableCards = function(toggle){
 			activePlayer = player;
 			passivePlayer= opponent;
 		}
-		
+		cleanUp();
 		checkValue = null;
 		remedy = null;
 		spliceIndex = null;

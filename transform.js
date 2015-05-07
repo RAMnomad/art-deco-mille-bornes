@@ -160,7 +160,11 @@ $(document).ready(function () {
 		},0);
 	}
 	
-	
+	window.cleanUp = function(){
+		$(".player.hand").children(".card:hidden").eq(1).remove();
+		$(".opponent.hand").children(".card:hidden").eq(7).remove();
+	}
+		
 	window.updateScore = function(switchp){
 		$(".scores").children("#opp").text(opponent.score);
 		$(".scores").children("#pl").text(player.score);
