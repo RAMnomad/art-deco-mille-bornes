@@ -380,6 +380,7 @@ var disableCards = function(toggle){
 			case "100KM":
 			case "200KM":  
 				activePlayer.score += activePlayer.hand[spliceIndex].distance; 
+				announce("This racer's gaining speed as she passes marker " + activePlayer.score); 
 				func = "remove";
 				break;
 				
@@ -408,7 +409,7 @@ var disableCards = function(toggle){
 			for (i = 0; i< activePlayer.hand.length; i++){
 				if(activePlayer.hand[i].disabled && activePlayer.hand[i].distance<50){
 					discard = activePlayer.hand.splice(i,1);
-					console.log("Discarded:", discard);
+					announce("Opponent discarded:" + discard[0].name);
 					remove(updateScore);
 				}
 			}
@@ -433,17 +434,18 @@ var disableCards = function(toggle){
 		console.log("Switch player function");
 		if (discard == null){
 			cardToPlay = activePlayer.hand.splice(spliceIndex, 1);	
-			console.log ("Card played:", cardToPlay);
+			announce(cardToPlay.name + " played by " + activePlayer.name);
 		}
 		if (activePlayer == player){
+			
 			activePlayer = opponent;
 			passivePlayer = player;
 		}
 		else{
+			
 			activePlayer = player;
 			passivePlayer= opponent;
 		}
-		cleanUp();
 		checkValue = null;
 		remedy = null;
 		spliceIndex = null;
@@ -474,7 +476,7 @@ function runGame(draw) {
     }
 	setTimeout(function(){
 		draw(disableCards);
-	},1000);
+	},0);
 	
 }
 	//add player name to highscores
