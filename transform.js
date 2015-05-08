@@ -132,38 +132,48 @@ $(document).ready(function () {
 		});
 	window.updatePlayArea = function(thisPlayer, switchp){
 		console.log("Playarea function");
+		var fromPlayArea, toPlayArea;
 		if (activePlayer == opponent){
-			var findWhat = ".card:hidden";
-		}
-		else{
-			findWhat = ".card";
-		}
-		var fromPlayArea = "div." + activePlayer.name + ".hand";
-		var toPlayArea = "div." + thisPlayer.name + ".play-area";
-		console.log("Card going to: ", toPlayArea);
-		$this = $(fromPlayArea).find(findWhat).eq(spliceIndex);
-		if (activePlayer == opponent){
+			fromPlayArea = $(".opponent.hand");
+			$this = $(".opponent.hand").find(".card").eq(spliceIndex);
 			$this.find(".top-left").text(activePlayer.hand[spliceIndex].name);
 			$this.find(".bottom-right").text(activePlayer.hand[spliceIndex].name);
 			var img = '<img src = "images/' + opponent.hand[spliceIndex].name + '.png" width = "130" />';
 			$this.find(".center").empty().append(img);
-			var a = $this.find("top-left").text()
+			var a = $this.find(".top-left").text()
 			console.log(a);
 		}
-		$this.clone()
-			.appendTo(toPlayArea).removeClass("animated flip flipInY disabled").show()
-			.children(".back").hide().children(".front").show();
+		else{
+			fromPlayArea = $(".player.hand");
+			$this = $(".player.hand").find(".card").eq(spliceIndex);
+		}
+		toPlayArea = "." + thisPlayer.name + ".play-area";
+	
+		$this.show().clone()
+			.appendTo(toPlayArea).removeClass("animated disabled").show()
+			.children(".back").hide().children(".front").show().children().show();
 		
-		$(fromPlayArea).find(".card").eq(spliceIndex).detach().appendTo(fromPlayArea).hide();
-		setTimeout(function(){
+		$this.detach().appendTo(fromPlayArea).hide();
+		//setTimeout(function(){
 		switchp(drawCard);
-		},0);
+		//},0);
 	}
-	
-	
+			
 	window.updateScore = function(switchp){
 		$(".scores").children("#opp").text(opponent.score);
 		$(".scores").children("#pl").text(player.score);
+		if (opponent.score>=1000){
+			announce("Tough luck, toots. Go chase yourself until you've got what it takes.")
+			setTimeout(function(){
+			window.location.reload();
+			},1000);
+		}
+		else if (player.score>=1000){
+			announce("Now you're on the trolley, Bearcat. You've won! Click play to show us what you got again.")
+			setTimeout(function(){
+			window.location.reload();
+			},1000);
+		}
 		switchp(drawCard);
 	}
 	
@@ -181,7 +191,7 @@ $(document).ready(function () {
 	window.removeCard = function(scores){
 		console.log("remove card function");
 		var hand = "." + activePlayer.name + ".hand";
-		$(hand).children(".card").eq(spliceIndex).appendTo(".player.hand").hide();
+		$(hand).children(".card").eq(spliceIndex).appendTo(hand).hide();
 		scores(switchPlayers);
 	}
 	window.removeFromActiveArea = function(name, thisPlayer){
