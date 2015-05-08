@@ -191,7 +191,11 @@ var disableCards = function(toggle){
 	for (i = 0; i<activePlayer.activeCards.length;i++){
 		console.log(activePlayer.activeCards[i]);
 		switch (activePlayer.activeCards[i]){
-				case "Limite de Vitesse": remedy = "Fin De Limite";break;
+				case "Limite de Vitesse": 
+					if(activePlayer.playState = "go")
+						activePlayer.disabledCards.push("75KM", "100KM", "200KM");
+					remedy = "Fin De Limite";
+					break;
 				case "Stop": remedy = "Roulez";console.log(remedy);break;
 				case "Accident": remedy = "Reparations";console.log(remedy);break;
 				case "Panne d'Essence": remedy = "Essence";console.log(remedy);break;
@@ -407,7 +411,14 @@ var disableCards = function(toggle){
 		console.log("Discard function");
 		if (activePlayer == opponent){
 			for (i = 0; i< activePlayer.hand.length; i++){
-				if(activePlayer.hand[i].disabled && activePlayer.hand[i].distance<50){
+				if(passivePlayer.prohibitedCards.indexOf(activePlayer.hand[i].name) != -1){
+					discard = activePlayer.hand.splice(i,1);
+					announce("Opponent discarded:" + discard[0].name);
+					remove(updateScore);
+				}
+			}
+			for (i = 0; i< activePlayer.hand.length; i++){
+				if(activePlayer.hand[i].disabled && activePlayer.hand[i].distance<100){
 					discard = activePlayer.hand.splice(i,1);
 					announce("Opponent discarded:" + discard[0].name);
 					remove(updateScore);

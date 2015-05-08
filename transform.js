@@ -135,7 +135,7 @@ $(document).ready(function () {
 		var fromPlayArea, toPlayArea;
 		if (activePlayer == opponent){
 			fromPlayArea = $(".opponent.hand");
-			$this = $(".opponent.hand").find(".card").eq(spliceIndex);
+			$this = $(".opponent.hand").find(".card:hidden").eq(spliceIndex);
 			$this.find(".top-left").text(activePlayer.hand[spliceIndex].name);
 			$this.find(".bottom-right").text(activePlayer.hand[spliceIndex].name);
 			var img = '<img src = "images/' + opponent.hand[spliceIndex].name + '.png" width = "130" />';
@@ -151,7 +151,8 @@ $(document).ready(function () {
 	
 		$this.show().clone()
 			.appendTo(toPlayArea).removeClass("animated disabled").show()
-			.children(".back").hide().children(".front").show().children().show();
+			.children(".back").hide()
+		$(toPlayArea).find(".front").show().children().show();
 		
 		$this.detach().appendTo(fromPlayArea).hide();
 		//setTimeout(function(){
