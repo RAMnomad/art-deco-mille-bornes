@@ -119,7 +119,8 @@ header {
 }
 .menu{
  margin: 10px;
- padding:10px;
+ padding-bottom:80px;
+ padding-top: 80px;
  background: url("images/clipframe.png");
  background-position:center;
  background-repeat:no-repeat;
@@ -130,7 +131,7 @@ header {
 .buttons {
     color:rgba(120, 100, 100, .6);
     background: url('images/seamlesspaper.png');
-    margin: 30px auto;
+    margin: 0 auto;
     text-align:center;
     padding:10px;
     width: 250px;
@@ -171,6 +172,12 @@ position: absolute;
 top: 120px;
 
 }	
+#instructions{
+    margin-top:90px;
+}
+#play{
+	margin-top:35px;
+}
 #rules {
 	width: 40%;
 	margin: 50px auto;
@@ -209,7 +216,8 @@ top: 120px;
   width: 188px;
   height: 250px;
   position: relative;
-  margin: 20px auto;
+  margin: 0 auto;
+  top: -50px;
 
 }
 .card{
@@ -328,15 +336,57 @@ display:none;
 	position: absolute;	
 	height:250px;
 	margin: 0 auto;
-	left:320px;
+	left:200px;
 }
-
+.clicked{
+	pointer-events:none;
+}
 .player.play-area{
 	top:480px;
 }
+.racer-label{
+	display:none;
+	font-family:header;
+	color: white;
+	background:url("images/checker.png");
+	background-repeat: no-repeat;
+	position: absolute;
+	right:20px;
+	width:200px;
+	height: 120px;
+	margin:20px;
+	-webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
 
+}
+.racer-tail{
+border-left: 100px solid transparent;
+	border-right: 100px solid transparent;
+	border-top: 70px solid #be2927;	
+
+}
+.racer-label h1{
+	font-size:20px;
+	background-color:#be2927;
+	padding:20px;
+ }
+.opponent.racer-label{
+	top:220px;
+ }
+.player.racer-label{
+	top:550px;
+ }
+
+
+					
 .opponent.play-area{
 	top:120px;
+}
+
+.play-area.card{
+	display:none;
 }
 .notify{
 display:none;

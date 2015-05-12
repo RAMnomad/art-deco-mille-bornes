@@ -53,7 +53,6 @@ $(document).ready(function () {
             $(div).children(".back").hide();
             $(div).find(".front").show().addClass("animated flip flipInY");
             $(div).find(".top-left").text(player.hand[i].name).show();
-			console.log("Displaying:", player.hand[i].name);
             $(div).find(".bottom-right").text(player.hand[i].name).show();
 			var img = '<img src = "images/' + player.hand[i].name + '.png" width = "130" />';
 			$(div).find(".center").empty().append(img);
@@ -66,11 +65,11 @@ $(document).ready(function () {
        
         var index = 0;
         var o = setInterval(function () {
-                var currentChild = $(".opponent").children(".card").eq(index);
+                var currentChild = $(".opponent.hand").children(".card").eq(index);
 				dealOpponentCard(currentChild,index);
             }, 500);
         var p = setInterval(function () {
-				var currentChild = $(".player").children(".card").eq(index);
+				var currentChild = $(".player.hand").children(".card").eq(index);
                 dealPlayerCard(currentChild, index);
                 index++;
             
@@ -90,7 +89,7 @@ $(document).ready(function () {
             });
              // getPlayerCards();
 			for (i=0; i<player.hand.length;i++){            
-                currentChild = $(".player").find(".card").eq(i);
+                currentChild = $(".player.hand").find(".card").eq(i);
                 displayCard(currentChild, i);
 				currentChild.css({"box-shadow" : 
 				"3px 3px 10px black", "border-radius" : "10px",
@@ -99,14 +98,15 @@ $(document).ready(function () {
 			$(".play-area").css({"display":"flex"});
 			$("button").show();
 			$(".scores").show();
+			$(".racer-label").show();
 			 runGame(drawCard);
         }, 4000);
 		
     });
 	window.announce = function(text){
-		
-		$(".notify").text(text).show().delay(2000).fadeOut();
-		
+		setTimeout(function(){
+		$(".notify").empty().text(text).show().delay(2000).fadeOut();
+		},0);
 	}
 	
 	window.playerSelectCard = function(update,discard){
@@ -119,8 +119,8 @@ $(document).ready(function () {
 			update(updatePlayArea,removeCard);		
 	}
 	$(".player").find(".front").click(function(){
-		console.log("Clicked is", clicked);
 		spliceIndex = $(this).closest(".card").index();
+		$(".player").find(".front").addClass("clicked");
 		playerSelectCard(updateCards, discardACard);
 	});
 	$("button").click(function(){
@@ -130,31 +130,20 @@ $(document).ready(function () {
 			discardACard(removeCard);
 		}
 		});
-	window.updatePlayArea = function(thisPlayer, switchp){
-		console.log("Playarea function");
-		var fromPlayArea, toPlayArea;
-		if (activePlayer == opponent){
-			fromPlayArea = $(".opponent.hand");
-			$this = $(".opponent.hand").find(".card:hidden").eq(spliceIndex);
-			$this.find(".top-left").text(activePlayer.hand[spliceIndex].name);
-			$this.find(".bottom-right").text(activePlayer.hand[spliceIndex].name);
-			var img = '<img src = "images/' + opponent.hand[spliceIndex].name + '.png" width = "130" />';
-			$this.find(".center").empty().append(img);
-			var a = $this.find(".top-left").text()
-			console.log(a);
-		}
-		else{
-			fromPlayArea = $(".player.hand");
-			$this = $(".player.hand").find(".card").eq(spliceIndex);
-		}
-		toPlayArea = "." + thisPlayer.name + ".play-area";
-	
-		$this.show().clone()
-			.appendTo(toPlayArea).removeClass("animated disabled").show()
-			.children(".back").hide()
-		$(toPlayArea).find(".front").show().children().show();
 		
-		$this.detach().appendTo(fromPlayArea).hide();
+	window.updatePlayArea = function(thisPlayer, switchp){
+		var fromPlayArea, toPlayArea;
+		fromPlayArea = "." + activePlayer.name + ".play-area";
+		toPlayArea = "." + thisPlayer.name + ".play-area";
+		img = '<img src = "images/' + activePlayer.hand[spliceIndex].name + '.png" width = "130" />'
+		$(toPlayArea).children(".card").eq(0).clone()
+			.appendTo(toPlayArea).show()
+			.find(".top-left").text(activePlayer.hand[spliceIndex].name)
+			.siblings(".bottom-right").text(activePlayer.hand[spliceIndex].name)
+			.siblings(".center").append(img)
+			.closest(".front").show();
+		if(activePlayer == player)
+			$(".player.hand").children(".card").eq(spliceIndex).detach().appendTo(".player.hand").hide();
 		//setTimeout(function(){
 		switchp(drawCard);
 		//},0);
@@ -175,13 +164,13 @@ $(document).ready(function () {
 			window.location.reload();
 			},1000);
 		}
-		switchp(drawCard);
+		else
+			switchp(drawCard);
 	}
 	
 	
 	window.toggleCards = function(choose){
-		console.log("toggle card function");
-		$(".player.hand").find(".front").removeClass("disabled");
+		$(".player.hand").find(".front").removeClass("disabled clicked");
 		for (var i = 0; i<player.hand.length; i++){
 			if (player.hand[i].disabled)
 				$(".player.hand").find(".front").eq(i).addClass("disabled");
@@ -190,14 +179,14 @@ $(document).ready(function () {
 			choose(updateCards,discardACard);
 	}
 	window.removeCard = function(scores){
-		console.log("remove card function");
 		var hand = "." + activePlayer.name + ".hand";
 		$(hand).children(".card").eq(spliceIndex).appendTo(hand).hide();
 		scores(switchPlayers);
 	}
-	window.removeFromActiveArea = function(name, thisPlayer){
+	window.removeFromActiveArea = function(cardName, thisPlayer){
 		var area = "." + thisPlayer + ".play-area";
-		$(area).find(".top-left:contains(name)").closest(".card").remove();
+		if ($(area).children().length>1)
+		$(area).find(".top-left:contains('" + cardName + "')").closest(".card").remove();
 	}
 	
     $("#instructions").click(function () {

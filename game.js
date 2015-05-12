@@ -29,15 +29,15 @@ function copyCard(d) {
 
 //define cards
 Deck = [
-new Card("Limite De Vitesse 50", "speed limit", null, 0, 50, 4),
+new Card("Limite De Vitesse 50", "speed limit", "Fin De Limite", 0, 50, 4),
 new Card("Fin De Limite", "remedy", "Limite De Vitesse 50", 0, 200, 6),
-new Card("Accident", "hazard", null, 0, 0, 3),
+new Card("Accident", "hazard", "Reparations", 0, 0, 3),
 new Card("Reparations", "remedy", "Accident", 0, 0, 6),
-new Card("Panne d'Essence", "hazard", null, 0, 0, 3),
+new Card("Panne d'Essence", "hazard", "Essence", 0, 0, 3),
 new Card("Essence", "remedy", "Panne d'Essence",  0, 0, 6),
-new Card("Creve", "hazard", null, 0, 0, 3),
+new Card("Creve", "hazard", "Roue De Secours", 0, 0, 3),
 new Card("Roue De Secours", "remedy", "Creve", 0, 0, 6),
-new Card("Stop", "hazard", null, 0, 0, 5),
+new Card("Stop", "hazard", "Roulez", 0, 0, 5),
 new Card("Roulez", "remedy", "Stop", 0, 0, 14),
 new Card("25KM", "travel", null, 25, 0, 10),
 new Card("50KM", "travel", null, 50, 0, 10),
@@ -82,12 +82,12 @@ function Player(name) {
     this.safetyEffect = function (card) {
         switch (card.name) {
             case "As Du Volant":
-                this.prohibitedCards.push("Limite De Vitesse 50");
-                this.speedLimit = 200;
-				var a = this.activeCards.indexOf("Limite De Vitesse 50")
+                this.prohibitedCards.push("Accident");
+				var a = this.activeCards.indexOf("Accident")
 				if (a != -1){
+					this.playState = "go";
 					this.activeCards.splice(a,1);
-					removeFromActiveArea("Limite De Vitesse 50", activePlayer.name);
+					removeFromActiveArea("Accident", activePlayer.name);
 				}
                 break;
             case "Citerne d'Essence":
@@ -111,13 +111,18 @@ function Player(name) {
 				}
                 break;
             case "Vehicule Prioritaire":
-                this.prohibitedCards.push("Stop");
-                
-				a = this.activeCards.indexOf("Stop");
+                this.prohibitedCards.push("Stop","Limite De Vitesse 50");
+                a = this.activeCards.indexOf("Stop");
+				var b = this.activeCards.indexOf("Limite De Vitesse 50");
 				if (a != -1){
 					this.playState = "go";
 					this.activeCards.splice(a,1);
 					removeFromActiveArea("Stop", activePlayer.name);
+				}
+				if (b != -1){
+					this.changeSpeedLimit(200);
+					this.activeCards.splice(a,1);
+					removeFromActiveArea("Limite De Vitesse 50", activePlayer.name);
 				}
                 break;
         }
@@ -142,17 +147,25 @@ for (i = 0; i < 12; i++) {
 }
 //create draw card function
 function drawCard(disable) {
-	console.log("Draw function");
-    var cardDrawn = Deck.shift();
-    activePlayer.hand.push(cardDrawn);
-	console.log (activePlayer.name, "drew:", cardDrawn.name, activePlayer.hand[6].name);
-	console.log(activePlayer.name, " hand length: ",activePlayer.hand.length);
-	disable(toggleCards);
+	if (Deck.length>0){
+		var cardDrawn = Deck.shift();
+		activePlayer.hand.push(cardDrawn);
+		console.log(activePlayer.name, " hand length: ",activePlayer.hand.length);
+		console.log(activePlayer.hand);
+		disable(toggleCards);
+	}
+	else {
+		announce("The deck is gone. Neither car makes it to the finish.")
+		setTimeout(function(){
+			window.location.reload();
+			},1000);
+	}
+	
 	
 }
 
 var disableCards = function(toggle){
-	console.log("Disable function");
+	var remedy2;
 	//disable hand of non active player 
 	if (activePlayer == opponent){
 		for (i = 0; i<player.hand.length; i++){
@@ -166,18 +179,16 @@ var disableCards = function(toggle){
 	
 	//reset array of cards to disable
 	activePlayer.disabledCards.length = 0;
-	
 	//check passive player's cards and determine cards to disable
-	activePlayer.disabledCards.concat(passivePlayer.prohibitedCards.slice(0));
+	activePlayer.disabledCards.push.apply(activePlayer.disabledCards, passivePlayer.prohibitedCards);
 	if (passivePlayer.speedLimit == 50)
-		activePlayer.disabledCards.push("Limite de Vitesse");
+		activePlayer.disabledCards.push("Limite De Vitesse 50");
 	if (passivePlayer.playState == "stop")
 		activePlayer.disabledCards.push("Stop", "Creve","Accident","Panne d'Essence");
-	
+	console.log("Active Cards:", activePlayer.activeCards);
 	//check play state
 	if (activePlayer.playState == "stop"){
 	//check for hazards and limits and disable cards
-		console.log(activePlayer.activeCards);
 		activePlayer.disabledCards.push("25KM", "50KM", "75KM", 
 					"100KM", "200KM", "Essence", 
 					"Reparations", "Roue De Secours", 
@@ -189,23 +200,29 @@ var disableCards = function(toggle){
 					"Roulez","Fin De Limite");
 	}
 	for (i = 0; i<activePlayer.activeCards.length;i++){
-		console.log(activePlayer.activeCards[i]);
 		switch (activePlayer.activeCards[i]){
-				case "Limite de Vitesse": 
+				case "Limite De Vitesse 50": 
 					if(activePlayer.playState = "go")
 						activePlayer.disabledCards.push("75KM", "100KM", "200KM");
-					remedy = "Fin De Limite";
+					 remedy2 = "Fin De Limite";
 					break;
-				case "Stop": remedy = "Roulez";console.log(remedy);break;
-				case "Accident": remedy = "Reparations";console.log(remedy);break;
-				case "Panne d'Essence": remedy = "Essence";console.log(remedy);break;
-				case "Creve": remedy = "Roue De Secours";console.log(remedy);break;
-				default: remedy = null;
+				case "Stop": remedy = "Roulez";break;
+				case "Accident": remedy = "Reparations";break;
+				case "Panne d'Essence": remedy = "Essence";break;
+				case "Creve": remedy = "Roue De Secours";break;
+				default: remedy = null; remedy2 = null; break;
 		}
 		
 		if(remedy != null){
 			for (j = 0; j<activePlayer.disabledCards.length; j++){
 				if (activePlayer.disabledCards[j] == remedy){
+					activePlayer.disabledCards.splice(j,1);
+				}
+			}
+		}
+		if(remedy2 != null){
+			for (j = 0; j<activePlayer.disabledCards.length; j++){
+				if (activePlayer.disabledCards[j] == remedy2){
 					activePlayer.disabledCards.splice(j,1);
 				}
 			}
@@ -229,9 +246,7 @@ var disableCards = function(toggle){
 	var chooseCard = function(update, discardfunc){
 		var lastCard, currentChild;
 		lastCard = activePlayer.hand.length - 1;
-		console.log("The last card is at index: ", lastCard);
-		console.log("Choose card function");
-	
+		
 	//set child div equal to last index of the hand; deal and display new card.
 
 		if (activePlayer == player){
@@ -240,10 +255,10 @@ var disableCards = function(toggle){
 			setTimeout(function(){
 				currentChild.show();
 				dealPlayerCard(currentChild, lastCard);
-			},1000);
+			},300);
 			setTimeout(function(){
 				displayCard(currentChild, lastCard);	
-			},2000);
+			},800);
 
 
 		}
@@ -300,7 +315,7 @@ var disableCards = function(toggle){
 							spliceIndex = i;
 						
 						if (spliceIndex == null){
-							if (activePlayer.hand[i].name == "Limite De Vitesse")
+							if (activePlayer.hand[i].name == "Limite De Vitesse 50")
 								spliceIndex = i;
 							
 						}
@@ -319,12 +334,14 @@ var disableCards = function(toggle){
 				}
 			}
 			if (spliceIndex == null){
-				discardfunc(removeCard);
+				setTimeout(function(){
+					discardfunc(removeCard);
+				},1000);
 			}
 			else{
 				setTimeout(function(){
 					update(updatePlayArea, removeCard);
-				},4000);
+				},1000);
 			}
 		}
 
@@ -332,7 +349,6 @@ var disableCards = function(toggle){
 	
 	//update score and active effects
 	var updateCards = function(board,remove){
-		console.log("Update cards function");
 		//remove card from hand
 		
 		var param;
@@ -347,6 +363,8 @@ var disableCards = function(toggle){
 			
 			case "Fin De Limite" : 
 				activePlayer.changeSpeedLimit(200);
+				i = activePlayer.activeCards.indexOf("Limite De Vitesse 50");
+				activePlayer.activeCards.splice(i,1);
 				func = "board";
 				param = activePlayer;
 				break;
@@ -354,7 +372,8 @@ var disableCards = function(toggle){
 			case "Accident":
 			case "Panne d'Essence":
 			case "Creve":
-			case "Stop": 
+			case "Stop":
+				removeFromActiveArea(activePlayer.hand[spliceIndex].remedyFor, passivePlayer.name);
 				passivePlayer.playState = "stop"; 
 				passivePlayer.activeCards.push(activePlayer.hand[spliceIndex].name);
 				func = "board";
@@ -372,7 +391,7 @@ var disableCards = function(toggle){
 						activePlayer.activeCards.splice(i, 1);
 					}
 				};
-				removeFromActiveArea(activePlayer.hand[spliceIndex].remedyFor, activePlayer.name)
+				removeFromActiveArea(activePlayer.hand[spliceIndex].remedyFor, activePlayer.name);
 				func = "board";
 				param = activePlayer;
 				break;
@@ -402,28 +421,33 @@ var disableCards = function(toggle){
 			board(param, switchPlayers);
 		}
 		else
-			remove(updateScore);
+			setTimeout(function(){
+				remove(updateScore);
+			},3000);
 	}
 	
 	
 	var discardACard = function(remove){
 		//discard 
-		console.log("Discard function");
 		if (activePlayer == opponent){
 			for (i = 0; i< activePlayer.hand.length; i++){
 				if(passivePlayer.prohibitedCards.indexOf(activePlayer.hand[i].name) != -1){
+					announce("Opponent discarded:" + activePlayer.hand[i].name);
 					discard = activePlayer.hand.splice(i,1);
-					announce("Opponent discarded:" + discard[0].name);
 					remove(updateScore);
 				}
 			}
+			var low=0;
 			for (i = 0; i< activePlayer.hand.length; i++){
-				if(activePlayer.hand[i].disabled && activePlayer.hand[i].distance<100){
-					discard = activePlayer.hand.splice(i,1);
-					announce("Opponent discarded:" + discard[0].name);
-					remove(updateScore);
+				if(activePlayer.hand[i].distance<activePlayer.hand[low].distance){
+					low = i;
 				}
 			}
+			announce("Opponent discarded: " + activePlayer.hand[low].name);
+			setTimeout(function(){
+				discard = activePlayer.hand.splice(low,1);
+				remove(updateScore);
+			},2000);
 		}
 		else{
 			if (spliceIndex == null){
@@ -434,7 +458,8 @@ var disableCards = function(toggle){
 			announce("Choose a Discard");
 			}
 			else{
-				discard = activePlayer.hand.splice(spliceIndex,1);
+				discard = true;
+				activePlayer.hand.splice(spliceIndex,1);
 				remove(updateScore);
 			}
 		}
@@ -442,10 +467,9 @@ var disableCards = function(toggle){
 			
 			//switch players and reset variables for next turn
 	var switchPlayers = function(draw){
-		console.log("Switch player function");
-		if (discard == null){
-			cardToPlay = activePlayer.hand.splice(spliceIndex, 1);	
-			announce(cardToPlay.name + " played by " + activePlayer.name);
+		if (discard == false){
+			announce(activePlayer.hand[spliceIndex].name + " played by " + activePlayer.name);
+			cardToPlay = activePlayer.hand.splice(spliceIndex, 1);		
 		}
 		if (activePlayer == player){
 			
@@ -460,8 +484,10 @@ var disableCards = function(toggle){
 		checkValue = null;
 		remedy = null;
 		spliceIndex = null;
-		discard = null;
-		draw(disableCards);
+		discard = false;
+		setTimeout(function(){
+			draw(disableCards);
+		},1000);
 	}	
 	
 	
