@@ -1,6 +1,6 @@
 body {
     background-image: url("images/dark_embroidery.png");
-	height: 1700px;
+	height: 1300px;
 }
 @font-face {
     font-family:'header';
@@ -33,13 +33,13 @@ header {
 
 .left{
  float:left;
- margin-left: 320px;
+ margin-left: 5%;
  margin-bottom: 10px;
  height: 160px;
  }
  
 .right{
- margin-right: 320px;
+ margin-right: 5%;
  margin-bottom: 10px;
  float:right;
  height:160px;
@@ -54,10 +54,11 @@ header {
 }
 .main {
 	position: relative;
-	top: -4100px;
-    min-height: 1395px;
-    background: url('images/seamlesspaper.png');
-    width: 1400px;
+	top: -3600px;
+    min-height: 1180px;
+	min-width:925px;
+    background: whitesmoke;
+    width: 85%;
     margin: 0px auto;
     text-align: center;
     padding-top: 20px;
@@ -70,10 +71,11 @@ header {
 	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.75);
 }
 .level1{
-	min-height:1385px;
+	min-width:950px;
+	min-height:1200px;
 	position: relative;
 	padding:0;
-	width:1450px;
+	width:87%;
 	background: url('images/seamlesspaper.png');
     margin: 0 auto;
 	top: 20px;
@@ -86,13 +88,14 @@ header {
 	border: solid 2px black;
 }
 .level2{
-	min-height:1360px;
+	min-width:970px;
+	min-height:1200px;
 	position: relative;
 	padding:0;
 	background: url('images/seamlesspaper.png');
-    width: 1500px;
+    width: 89%;
 	margin: 0 auto;
-    top: -1340px;
+    top: -1170px;
 	opacity: .5;
 	border-radius: 10px;
     -webkit-border-radius:10px;
@@ -102,14 +105,15 @@ header {
 	border: solid 2px black;
 	}
 .level3{
-	min-height:1340px;
+	min-width:990px;
+	min-height:1200px;
 	border: solid 1px black;
 	position: relative;
 	padding:0;
 	margin: 0 auto;
 	background: url('images/seamlesspaper.png');
-    width: 1550px;
-    top: -2680px;
+    width: 91%;
+    top: -2360px;
 	opacity: .2;
 	border-radius: 10px;
     -webkit-border-radius:10px;
@@ -162,16 +166,21 @@ header {
 	text-decoration:underline;
 	}
 .scores{
+text-align:center;
 padding: 45px;
 float: left;
 background: url("images/frame.png");
 background-size: cover;
-font-family: header;
+font-family: 'Lato', sans-serif;  
 display: none;
 position: absolute;
 top: 120px;
-
+font-variant:small-caps;
+margin-left:20px;
 }	
+.scores h2{
+	font-family:header;
+}
 #instructions{
     margin-top:90px;
 }
@@ -315,8 +324,19 @@ margin: 10px 0 0 12px;
   display: none;
   height:250px;
   min-width:150px;
+  max-width:70%;
   margin: 0 60px;
  }
+@media screen and (max-width:1400px){
+	.hand{
+		max-width:60%;
+		margin: 0 30px;
+	}
+	.discard{
+		left:20px;
+	}
+}
+
 .hand .card{
 	margin-right: -186px;
 	display:none;
@@ -346,7 +366,7 @@ display:none;
 }
 .racer-label{
 	display:none;
-	font-family:header;
+  font-family: 'Lato', sans-serif;  
 	color: white;
 	background:url("images/checker.png");
 	background-repeat: no-repeat;
@@ -403,13 +423,13 @@ display:none;
  left: 500px;
  }
  .discard{
-	width:100px;
 	height: 50px;
 	position: absolute;
 	float: left;
 	display:none;
-	left:90px;
+	left:60px;
 	top: 850px;
+	color:white;
 }
 .disabled{
 	background-image:none;
@@ -420,8 +440,30 @@ display:none;
 .disabled img{
 	opacity: .5;
 	}
-.safety{}
-.hazard{}
-.travel{}
-.speedlimit{}
-.remedy{}
+.btn {
+  background: #197311;
+  background-image: -webkit-linear-gradient(top, #197311, #133d0d);
+  background-image: -moz-linear-gradient(top, #197311, #133d0d);
+  background-image: -ms-linear-gradient(top, #197311, #133d0d);
+  background-image: -o-linear-gradient(top, #197311, #133d0d);
+  background-image: linear-gradient(to bottom, #197311, #133d0d);
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: 'Lato', sans-serif;  
+  font-size: 20px;
+  padding: 10px 30px 10px 30px;
+  text-decoration: none;
+  text-align:center;
+}
+
+.btn:hover {
+  background: #0ac736;
+  background-image: -webkit-linear-gradient(top, #0ac736, #168026);
+  background-image: -moz-linear-gradient(top, #0ac736, #168026);
+  background-image: -ms-linear-gradient(top, #0ac736, #168026);
+  background-image: -o-linear-gradient(top, #0ac736, #168026);
+  background-image: linear-gradient(to bottom, #0ac736, #168026);
+  text-decoration: none;
+  text-align:center;
+}

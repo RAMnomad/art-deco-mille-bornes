@@ -38,8 +38,7 @@ $(document).ready(function () {
         //play animation functions
         window.dealPlayerCard = function(div) {
 			$(div).children(".back").show().addClass("animated rollInPlayer").css({
-				"margin-top":"15px",
-                "margin-right": "-45px"
+				"margin":"auto"
             });
 			$(div).show();
         }
@@ -82,8 +81,7 @@ $(document).ready(function () {
 			$("div.opponent.hand").children(".card").fadeOut();
 			$(".hand").css({"left":"200px"});
 			$(".player").children(".card").css({
-				"margin-top":"15px",
-                "margin-right": "-45px"
+				"margin":"auto"
             }).each(function () {
                 $(this).children(".back").hide(1);
             });
